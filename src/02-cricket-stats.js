@@ -39,20 +39,105 @@
  */
 export const calcStrikeRate = (runs, balls) => {
   // Your code here
+  if(runs < 0 || balls <= 0 ){
+    return 0
+  }
+
+ let rate = (runs ,balls) => {
+   let calculate =  runs / balls * 100
+   let strikeRate = parseFloat(calculate).toFixed(2)
+   let numStrikeRate = Number(strikeRate)
+   return numStrikeRate
+  }
+
+ return rate(runs , balls)
 };
 
 export const calcEconomy = (runsConceded, overs) => {
   // Your code here
+  if(runsConceded < 0 || overs <= 0){
+    return 0
+  }
+
+  let economyCalArrFn = (runsConceded , overs) => {
+    let calEco = runsConceded / overs
+    let economyFloat = parseFloat(calEco.toFixed(2))
+    let economy = Number(economyFloat)
+
+    return economy
+  }
+  return economyCalArrFn(runsConceded , overs)
 };
 
 export const calcBattingAvg = (totalRuns, innings, notOuts = 0) => {
   // Your code here
+  let inningConversion = innings - notOuts 
+
+  if(inningConversion <= 0 ){
+    return 0 
+  }
+  
+  let calculateAvg = (totalRuns , innings , notOuts) => {
+    let avgCal = totalRuns / (innings - notOuts)
+
+    let BattingAvg = Number(parseFloat(avgCal.toFixed(2)))
+
+    return BattingAvg
+  }
+  return calculateAvg(totalRuns , innings , notOuts)
 };
 
 export const isAllRounder = (battingAvg, economy) => {
   // Your code here
+  if(battingAvg > 30 && economy < 8 ){
+    return true
+  }
+  else {
+    return false
+  }
 };
 
 export const getPlayerCard = (player) => {
   // Your code here
-};
+ if(!player ||   !player.name){
+    return null
+  }
+  const playerRuns = player.runs
+
+  const playerTotalRuns = player.totalRuns ;
+  const totalBallPlayed = player.balls;
+  const playersTotalInnings = player.innings;
+  const playerNotOut = player.notOuts;
+  const playerRunConceded = player.runsConceded;
+  const totalOvers = player.overs
+
+    let name = player.name
+
+    let strikeRate = Number(parseFloat(playerRuns / totalBallPlayed * 100).toFixed(2))
+
+    let economy = Number(parseFloat(playerRunConceded / totalOvers).toFixed(2))
+
+    let battingAvg = Number(parseFloat(playerTotalRuns / (playersTotalInnings - playerNotOut)).toFixed(2));
+
+    let isAllRounder 
+    if(battingAvg > 30 && economy < 8){
+      isAllRounder = true
+    }
+    else{
+      isAllRounder = false
+    }
+    return {name , strikeRate , economy , battingAvg , isAllRounder}
+  }
+
+
+
+
+console.log(calcStrikeRate(45, 30));
+
+console.log(calcEconomy(35,2));
+
+console.log(calcBattingAvg(140 ,4 , 1));
+
+console.log(isAllRounder(43,2));
+
+console.log(getPlayerCard({ name: "Jadeja", runs: 35, balls: 20, totalRuns: 2000, innings: 80, notOuts: 10, runsConceded: 1500, overs: 200 }))

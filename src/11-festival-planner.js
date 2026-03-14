@@ -50,4 +50,71 @@
  */
 export function createFestivalManager() {
   // Your code here
+
+  const festivals = [];
+
+
+  function isValidFestival(name, date, type) {
+    const validTypes = ["religious", "national", "cultural"];
+    if (
+      !name || typeof name !== "string" ||
+      !date || typeof date !== "string" ||
+      !validTypes.includes(type)
+    ) return false;
+    return true;
+  }
+
+
+  function exists(name) {
+    return festivals.some(f => f.name === name);
+  }
+
+  return {
+
+    addFestival(name, date, type) {
+      if (!isValidFestival(name, date, type) || exists(name)) return -1;
+      festivals.push({ name, date, type });
+      return festivals.length;
+    },
+
+
+    removeFestival(name) {
+      const index = festivals.findIndex(f => f.name === name);
+      if (index === -1) return false;
+      festivals.splice(index, 1);
+      return true;
+    },
+
+
+    getAll() {
+      return festivals.map(f => ({ ...f }));
+    },
+
+
+    getByType(type) {
+      return festivals
+        .filter(f => f.type === type)
+        .map(f => ({ ...f }));
+    },
+
+
+    getUpcoming(currentDate, n = 3) {
+      const currentTime = new Date(currentDate).getTime();
+      if (isNaN(currentTime)) return [];
+
+      return festivals
+        .filter(f => new Date(f.date).getTime() >= currentTime)
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, n)
+        .map(f => ({ ...f }));
+    },
+
+
+    getCount() {
+      return festivals.length;
+    }
+  };
 }
+
+console.log(createFestivalManager("Diwali", "2025-10-20", "religious"));
+
